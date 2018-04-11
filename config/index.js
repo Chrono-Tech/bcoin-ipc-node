@@ -21,6 +21,10 @@ module.exports = {
     ipcName: process.env.IPC_NAME || 'bitcoin',
     ipcPath: process.env.IPC_PATH || '/tmp/',
     appSpace: process.env.APP_SPACE || 'app.'
-  }
+  },
+  http: {
+    port: process.env.HTTP_PORT || 3000
+  },
+  type: 0
 
 };
