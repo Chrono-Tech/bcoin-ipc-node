@@ -42,7 +42,7 @@ class IPC {
           try {
             data = JSON.parse(data);
             const json = await this.node.rpc.execute(data);
-
+            
             ipc.server.emit(socket, 'message', {result: json, id: data.id});
           } catch (e) {
             ipc.server.emit(socket, 'message', {

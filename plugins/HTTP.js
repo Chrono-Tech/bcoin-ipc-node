@@ -17,21 +17,12 @@ class HTTP {
 
         const ws = new websocket.Server({server});
 
-        this.node.rpc.add('getcoinsbyaddress', async (...args) => {
-            let coins = await this.node.getCoinsByAddress(...args);
-            return coins.map(coin =>
-             coin.getJSON(this.node.network.type)
-            );
-        });
-  
-        this.node.rpc.add('getmetabyaddress', this.node.getMetaByAddress.bind(this.node));
-
         ws.on('connection', (socket) => {
-            console.log('New Connection');
             socket.on('message', async (data) => {
                 try {
                     data = JSON.parse(data);
                     const json = await this.node.rpc.execute(data);
+                    
                     socket.send(JSON.stringify({result: json, id: data.id}));
                 } catch (e) {
                     socket.send(JSON.stringify({

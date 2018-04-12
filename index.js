@@ -6,15 +6,12 @@ const config = require('./config'),
     require('lcoin').fullnode : require('bcoin').fullnode;
 
 const node = new FullNode(config.node);
-let net;
 
-if(config.type) {
-  net = new IPC(config.ipc);
-} else {
-  net = new HTTP(config.http)
-}
+const ipc = new IPC(config.ipc);
+const http = new HTTP(config.http);
 
-node.use(net);
+node.use(ipc);
+node.use(http);
 node.use(bzmq);
 
 (async () => {
