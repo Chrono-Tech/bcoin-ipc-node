@@ -1,14 +1,17 @@
 const config = require('./config'),
   bzmq = require('bzmq'),
   IPC = require('./plugins/IPC'),
+  HTTP = require('./plugins/HTTP'),
   FullNode = config.blockchain === 'litecoin' ?
     require('lcoin').fullnode : require('bcoin').fullnode;
 
 const node = new FullNode(config.node);
 
 const ipc = new IPC(config.ipc);
+const http = new HTTP(config.http);
 
 node.use(ipc);
+node.use(http);
 node.use(bzmq);
 
 (async () => {
