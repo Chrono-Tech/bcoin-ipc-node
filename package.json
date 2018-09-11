@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@bcash-org/bcash": "^1.0.0-pre",
     "bcoin": "1.0.0-beta.15",
     "bzmq": "0.0.4",
     "dotenv": "^5.0.1",
