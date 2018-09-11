@@ -1,13 +1,23 @@
 const config = require('./config'),
-  customNetworkRegistrator = require('./networks'),
   bzmq = require('bzmq'),
-  IPC = require('./plugins/IPC'),
-  FullNode = config.blockchain === 'litecoin' ?
-    require('lcoin').fullnode : require('bcoin').fullnode;
+  IPC = require('./plugins/IPC');
 
-customNetworkRegistrator(config.node.network);
+const blockchain = {
+  litecoin: {
+    networks: require('lcoin/lib/protocol/networks'),
+    node: require('lcoin').fullnode
+  },
+  bitcoin: {
+    networks: require('bcoin/lib/protocol/networks'),
+    node: require('bcoin').fullnode
+  },
+  bcc: {
+    networks: require('@bcash-org/bcash/lib/protocol/networks'),
+    node: require('@bcash-org/bcash').FullNode
+  }
+};
 
-const node = new FullNode(config.node);
+const node = new blockchain[config.blockchain].node(config.node);
 const ipc = new IPC(config.ipc);
 
 node.use(ipc);
@@ -16,7 +26,6 @@ node.use(bzmq);
 (async () => {
 
   await node.open();
-
   await node.connect();
 
   node.on('connect', (entry) => {
